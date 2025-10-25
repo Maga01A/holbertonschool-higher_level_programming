@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import importlib.util
-import sys
 if __name__ == "__main__":
     path = "/tmp/hidden_4.pyc"
     spec = importlib.util.spec_from_file_location("hidden_4", path)
