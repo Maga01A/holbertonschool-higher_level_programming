@@ -4,4 +4,3 @@ def multiple_returns(senctence):
         return (0, None)
     else:
         return (len(senctence), senctence[0])
-    
