@@ -4,3 +4,4 @@ def simple_delete(a_dictionary, key=""):
     Args:
         a_dictionary (dict): The dictionary to delete the key from.
         key: The key to delete.
+        
