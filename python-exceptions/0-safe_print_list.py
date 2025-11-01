@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 def safe_print_list(my_list=[], x=0):
-    """Prints up to x elements of a list and returns the number printed."""
-    count = 0
-    for i in range(x):
-        try:
-            print("{}".format(my_list[i]), end="")
-            count += 1
-        except IndexError:
-            break
-    print()
-    return count
+    try:
+        len_list = 0
+        for i in range(0, x):
+            print(my_list[i], end='')
+            len_list += 1
+        print()
+    except (IndexError, TypeError):
+        print()
+    return len_list
