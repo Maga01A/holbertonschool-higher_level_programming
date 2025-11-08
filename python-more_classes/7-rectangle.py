@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Defines a Rectangle class with print_symbol attribute."""
 
+
 class Rectangle:
     """Defines a rectangle."""
 
