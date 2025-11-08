@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""Defines a Rectangle class with print_symbol attribute."""
+
 class Rectangle:
     """Defines a rectangle."""
 
@@ -54,10 +56,10 @@ class Rectangle:
         """Return the rectangle with print_symbol."""
         if self.__width == 0 or self.__height == 0:
             return ""
-        rect = ""
+        rect = []
         for _ in range(self.__height):
-            rect += str(self.print_symbol) * self.__width + "\n"
-        return rect.strip()
+            rect.append(str(self.print_symbol) * self.__width)
+        return "\n".join(rect)
 
     def __repr__(self):
         """Return a string representation to recreate the object."""

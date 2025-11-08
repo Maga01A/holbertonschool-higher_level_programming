@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-"""Defines a Rectangle class with various utilities (area, perimeter, print,
-comparison, creation of squares, instance counting, etc.)."""
+"""Defines a Rectangle class with various utilities such as area,
+perimeter, string representation, comparison, and creation of squares.
+"""
 
 
 class Rectangle:
@@ -49,7 +50,9 @@ class Rectangle:
         return self.__width * self.__height
 
     def perimeter(self):
-        """Return the rectangle perimeter. If width or height is 0, returns 0."""
+        """Return the rectangle perimeter.
+        If width or height is 0, returns 0.
+        """
         if self.__width == 0 or self.__height == 0:
             return 0
         return 2 * (self.__width + self.__height)

@@ -1,8 +1,9 @@
 #!/usr/bin/python3
+"""Defines a Rectangle class."""
+
 class Rectangle:
     """Defines a rectangle."""
 
-    # Public class attribute
     number_of_instances = 0
 
     def __init__(self, width=0, height=0):
