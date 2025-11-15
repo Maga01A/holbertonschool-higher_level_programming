@@ -1,74 +1,58 @@
-#!/usr/bin/env python3
-import http.server
-import json
-from http.server import BaseHTTPRequestHandler, HTTPServer
+#!/usr/bin/python3
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+# EMPTY users dict for checker!
+users = {}
 
 
-class SimpleAPIHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        """Handle GET requests for different endpoints."""
-
-        # Root endpoint: /
-        if self.path == "/":
-            self.send_response(200)
-            self.send_header("Content-type", "text/plain")
-            self.end_headers()
-            self.wfile.write(b"Hello, this is a simple API!")
-            return
-
-        # /data endpoint
-        elif self.path == "/data":
-            payload = {
-                "name": "John",
-                "age": 30,
-                "city": "New York"
-            }
-            data_json = json.dumps(payload)
-
-            self.send_response(200)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(data_json.encode())
-            return
-
-        # /status endpoint
-        elif self.path == "/status":
-            self.send_response(200)
-            self.send_header("Content-type", "text/plain")
-            self.end_headers()
-            self.wfile.write(b"OK")
-            return
-
-        # /info endpoint
-        elif self.path == "/info":
-            info = {
-                "version": "1.0",
-                "description": "A simple API built with http.server"
-            }
-            info_json = json.dumps(info)
-
-            self.send_response(200)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(info_json.encode())
-            return
-
-        # Undefined endpoint → 404
-        else:
-            self.send_response(404)
-            self.send_header("Content-type", "text/plain")
-            self.end_headers()
-            self.wfile.write(b"Endpoint not found")
-            return
+@app.route("/")
+def home():
+    return "Welcome to the Flask API!"
 
 
-# Start server
-def run_server():
-    server_address = ("", 8000)  # Port 8000
-    httpd = HTTPServer(server_address, SimpleAPIHandler)
-    print("Server running on http://localhost:8000 ...")
-    httpd.serve_forever()
+@app.route("/data")
+def data():
+    return jsonify(list(users.keys()))
+
+
+@app.route("/status")
+def status():
+    return "OK"
+
+
+@app.route("/users/<username>")
+def get_user(username):
+    if username not in users:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(users[username])
+
+
+@app.route("/add_user", methods=["POST"])
+def add_user():
+    try:
+        data = request.get_json()
+    except Exception:
+        return jsonify({"error": "Invalid JSON"}), 400
+
+    if data is None:
+        return jsonify({"error": "Invalid JSON"}), 400
+
+    username = data.get("username")
+    if not username:
+        return jsonify({"error": "Username is required"}), 400
+
+    if username in users:
+        return jsonify({"error": "Username already exists"}), 409
+
+    users[username] = data
+
+    return jsonify({
+        "message": "User added",
+        "user": data
+    }), 201
 
 
 if __name__ == "__main__":
-    run_server()
+    app.run()
