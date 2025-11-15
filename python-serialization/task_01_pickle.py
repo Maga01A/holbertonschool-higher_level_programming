@@ -1,30 +1,47 @@
 #!/usr/bin/python3
-"""Basic serialization and deserialization module."""
-
-import json
-
-
-def serialize_and_save_to_file(data, filename):
-    """
-    Serialize a Python dictionary to JSON and save it to a file.
-
-    Args:
-        data (dict): Dictionary to serialize.
-        filename (str): Output JSON file name. Existing file will be overwritten.
-    """
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(data, f)
+"""Module to serialize and deserialize a custom Python object using pickle."""
+import pickle
 
 
-def load_and_deserialize(filename):
-    """
-    Load and deserialize JSON data from a file into a Python dictionary.
+class CustomObject:
+    """Custom object with name, age, and is_student attributes."""
 
-    Args:
-        filename (str): JSON file name to read.
+    def __init__(self, name, age, is_student):
+        self.name = name
+        self.age = age
+        self.is_student = is_student
 
-    Returns:
-        dict: Deserialized Python dictionary.
-    """
-    with open(filename, "r", encoding="utf-8") as f:
-        return json.load(f)
+    def display(self):
+        """Print the object attributes in a readable format."""
+        print(f"Name: {self.name}")
+        print(f"Age: {self.age}")
+        print(f"Is Student: {self.is_student}")
+
+    def serialize(self, filename):
+        """Serialize the object to a file using pickle.
+
+        Args:
+            filename (str): File to save the serialized object.
+        """
+        try:
+            with open(filename, 'wb') as f:
+                pickle.dump(self, f)
+        except (OSError, pickle.PickleError):
+            return None
+
+    @classmethod
+    def deserialize(cls, filename):
+        """Deserialize an object from a pickle file.
+
+        Args:
+            filename (str): File from which to load the object.
+
+        Returns:
+            CustomObject or None: The loaded object or None on failure.
+        """
+        try:
+            with open(filename, 'rb') as f:
+                obj = pickle.load(f)
+            return obj
+        except (OSError, pickle.PickleError, EOFError):
+            return None
