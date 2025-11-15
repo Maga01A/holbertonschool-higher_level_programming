@@ -13,6 +13,7 @@ class Student:
 
     def to_json(self, attrs=None):
         """Return dictionary representation of the Student instance.
+
         If attrs is a list of strings, only include those attributes.
         """
         if isinstance(attrs, list):
