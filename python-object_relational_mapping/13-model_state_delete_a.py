@@ -1,32 +1,21 @@
 #!/usr/bin/python3
 """
-Module for deleting all the cities with 'a'.
+Deletes all State objects with a name containing the letter a
+from the database hbtn_0e_6_usa.
 """
+import sys
+from model_state import Base, State
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sys import argv
 
-from model_state import Base, State
-
-# Run only executed
 if __name__ == "__main__":
-
-    # Engine creation with mysql and mysqldb DBAPI
-    engine = create_engine("mysql+mysqldb://{}:{}@localhost:3306/{}"
-                           .format(argv[1], argv[2], argv[3]))
-
-    # Creating all classes in DB
-    Base.metadata.create_all(engine)
-
-    # Creating Session and its instance
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
+        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
     Session = sessionmaker(bind=engine)
     session = Session()
-
-    # Deleting everything with a
-    for state in session.query(State).filter(State.name.like('%a%')).all():
+    states_to_delete = session.query(State).filter(
+        State.name.like('%a%')).all()
+    for state in states_to_delete:
         session.delete(state)
     session.commit()
-
-    # Closing the session
-    if session:
-        session.close()
+    session.close()

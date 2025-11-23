@@ -1,27 +1,20 @@
 #!/usr/bin/python3
-"""Module for Selecting states where name equals argument(safe)"""
+"""
+Script that takes in an argument and displays all values in the states
+table of hbtn_0e_0_usa where name matches the argument.
+Safe from MySQL injections!
+"""
+import MySQLdb
+import sys
 
-if __name__ == '__main__':
-    from sys import argv
-    import MySQLdb
-
-    db = MySQLdb.connect(
-        user=argv[1],
-        password=argv[2],
-        database=argv[3]
-    )
-
-    cursor = db.cursor()
-
-    cursor.execute("SELECT * \
-                    FROM `states` \
-                    ORDER BY id")
-
-    for state in cursor.fetchall():
-        if state[1] == argv[4]:
-            print(state)
-
-    if cursor:
-        cursor.close()
-    if db:
-        db.close()
+if __name__ == "__main__":
+    db = MySQLdb.connect(host="localhost", user=sys.argv[1],
+                         passwd=sys.argv[2], db=sys.argv[3], port=3306)
+    cur = db.cursor()
+    cur.execute("SELECT * FROM states WHERE name = %s ORDER BY id ASC",
+                (sys.argv[4],))
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
+    cur.close()
+    db.close()
